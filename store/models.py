@@ -47,5 +47,8 @@ class ShoppingCart(models.Model):
 class ShoppingCartToProductRelation(models.Model):
 	shopping_cart = models.ForeignKey(ShoppingCart)
 	product = models.ForeignKey(Product)
-	quantity = models.PositiveIntegerField()
+	quantity = models.PositiveIntegerField(default=1)
+
+	class Meta:
+		unique_together = (("shopping_cart", "product"),)
 
