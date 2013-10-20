@@ -27,14 +27,25 @@ class Product(models.Model):
 class Order(models.Model):
 	order_date = models.DateField()
 	user = models.ForeignKey(User)
+	products = models.ManyToManyField(Product, through='OrderToProductRelation')
 
 	def __unicode__(self):
 		return self.order_date + " " + self.user
 
-class OrderProductRelation(models.Model):
+class OrderToProductRelation(models.Model):
 	order = models.ForeignKey(Order)
 	product = models.ForeignKey(Product)
 	quantity = models.PositiveIntegerField()
 
 	def __unicode__(self):
 		return self.order + " " + self.product.name + " (" + self.quantity + ")"
+
+class ShoppingCart(models.Model):
+	user = models.OneToOneField(User, primary_key=True)
+	products = models.ManyToManyField(Product, through='ShoppingCartToProductRelation')
+
+class ShoppingCartToProductRelation(models.Model):
+	shopping_cart = models.ForeignKey(ShoppingCart)
+	product = models.ForeignKey(Product)
+	quantity = models.PositiveIntegerField()
+

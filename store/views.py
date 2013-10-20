@@ -2,7 +2,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.control.auth import authenticate
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 def index(request):
 	return HttpResponse("Hello, world.  You're at the store index")
@@ -33,9 +35,20 @@ def login(request):
 		user = authenticate(username=email, password=password)
 		if user is not None:
 			if user.is_active:
-				return HttpResponse("User is authenticated")
+				auth_login(request, user)
+				if request.GET['next']:
+					return redirect(request.GET['next'])
+				else:
+					return HttpResponse("User is authenticated")
 			else:
 				return HttpResponse("User is not authenticated")
 		else:
 			return HttpResponse("Username and password were incorrect.")
 
+def logout(request):
+	auth_logout(request)
+	return HttpResponse("You logged out brah!")
+
+@login_required(login_url='/store/login')
+def test(request):
+	return HttpResponse("You are logged in brah!")	
