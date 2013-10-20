@@ -8,12 +8,14 @@ from django.shortcuts import redirect
 from store.models import *
 from django.db import transaction
 import datetime
+import sys
 
 def index(request):
 	return HttpResponse("Hello, world.  You're at the store index")
 
 # QA:
 # 1. validate email, first/last name, password length
+# 2. handle issue with someone trying to register again
 def register(request):
 	if request.method == 'GET':
 		return render(request, 'store/register.html')	
@@ -26,9 +28,6 @@ def register(request):
 
 		user = User.objects.create_user(email, email, password, first_name=first_name, last_name=last_name)
 		user.save()
-		#Create a shopping cart for this user
-		shopping_cart = ShoppingCart(user=user)
-		shopping_cart.save()
 
 		return HttpResponse("Successfully registered, wahoo!")
 
@@ -63,8 +62,8 @@ def logout(request):
 # quantity of 0 will indicate we want to remove the item from the cart
 @login_required(login_url='/store/login')
 def add_to_cart(request, product_id, quantity):
-	shopping_cart = ShoppingCart.objects.get(user=request.user)
-	product = Product.objects.get(id=product_id)
+	shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user, merchant=request.Merchant)
+	product = Product.objects.get(id=product_id, merchant=request.Merchant)
 	if int(quantity) <= 0:
 		# Remove from cart
 		CartItem.objects.filter(shopping_cart=shopping_cart, product=product).delete()
@@ -86,11 +85,11 @@ def add_to_cart(request, product_id, quantity):
 @transaction.commit_on_success
 def checkout(request):
 	DEBUG_empty_cart = True 
-	shopping_cart = ShoppingCart.objects.get(user=request.user)
+	shopping_cart = ShoppingCart.objects.get(user=request.user, merchant=request.Merchant)
 	cart_items = CartItem.objects.filter(shopping_cart=shopping_cart)
 
 	# Create a new order
-	order = Order(order_date=datetime.datetime.now(), user=request.user)
+	order = Order(order_date=datetime.datetime.now(), user=request.user, merchant=request.Merchant)
 	order.save()
 
 	order_items = []
@@ -105,7 +104,4 @@ def checkout(request):
 		cart_items.delete()
 
 	return HttpResponse("Yo, you successfully placed an order!")
-
-
-
 

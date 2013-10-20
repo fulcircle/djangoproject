@@ -98,6 +98,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    # ADDED BY VIK
+    # subdomains will map to specific Merchant objects
+    'store.middleware.subdomains.MerchantSubdomainMiddleware'
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -158,4 +161,14 @@ LOGGING = {
     }
 }
 
+# ADDED BY VIK
+# make the request and auth objects available to templates (used for redirecting back to a previous page after login)
 TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth","django.core.context_processors.request")
+
+# ADDED BY VIK
+# set the site domain for subdomain redirect stuff (look at store/middleware/subdomains.py) 
+DEFAULT_SITE_DOMAIN = "www.example.com"
+
+# ADDED BY VIK
+# Login will persist across all our stores
+SESSION_COOKIE_DOMAIN = ".example.com"
