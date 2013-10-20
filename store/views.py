@@ -10,6 +10,8 @@ from store.models import *
 def index(request):
 	return HttpResponse("Hello, world.  You're at the store index")
 
+# QA:
+# 1. validate email, first/last name, password length
 def register(request):
 	if request.method == 'GET':
 		return render(request, 'store/register.html')	
@@ -27,6 +29,7 @@ def register(request):
 		shopping_cart.save()
 
 		return HttpResponse("Successfully registered, wahoo!")
+
 
 def login(request):
 	if request.method == 'GET':
@@ -59,6 +62,11 @@ def logout(request):
 def add_to_cart(request, product_id, quantity):
 	shopping_cart = ShoppingCart.objects.get(user=request.user)
 	product = Product.objects.get(id=product_id)
+	if int(quantity) <= 0:
+		# Remove from cart
+		ShoppingCartToProductRelation.objects.filter(shopping_cart=shopping_cart, product=product).delete()
+		return HttpResponse("Yo, " + product.name + " was removed from the cart, bud")
+
 	# Check if product exists already, if so, just update the quantity
 	shopping_cart_to_product, created = ShoppingCartToProductRelation.objects.get_or_create(shopping_cart=shopping_cart, product=product)
 	shopping_cart_to_product.quantity = quantity
