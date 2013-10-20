@@ -1,7 +1,7 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
@@ -16,6 +16,7 @@ def index(request):
 # QA:
 # 1. validate email, first/last name, password length
 # 2. handle issue with someone trying to register again
+@transaction.commit_on_success
 def register(request):
 	if request.method == 'GET':
 		return render(request, 'store/register.html')	
@@ -27,6 +28,8 @@ def register(request):
 		password = request.POST['password']
 
 		user = User.objects.create_user(email, email, password, first_name=first_name, last_name=last_name)
+		customers_grp = Group.objects.get(name='customers')
+		user.groups.add(customers_grp)
 		user.save()
 
 		return HttpResponse("Successfully registered, wahoo!")

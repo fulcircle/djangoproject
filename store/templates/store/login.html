@@ -1,4 +1,4 @@
-<form name="loginForm" action="{% url 'login' %}?next={{request.GET.next}}" method="POST">{% csrf_token %}
+<form name="loginForm" action="{% url 'store.login' %}?next={{request.GET.next}}" method="POST">{% csrf_token %}
 <br>
 Email: <input type="text" name="email"><br>
 Password: <input type="password" name="password" /><br>
