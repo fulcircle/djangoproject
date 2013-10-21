@@ -207,14 +207,14 @@ hr
 
 #content .post
 {
-	padding: 40px;
+	padding: 40px 40px 0px 40px;
 }
 
 #box2 
 {
 	margin: 0px 40px;
-	padding: 40px 0px;
-	border-top: 1px solid #DDBE88;
+	padding: 0px 0px;
+	border-top: 0px solid #DDBE88;
 }
 
 /** SIDEBAR */
