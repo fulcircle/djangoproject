@@ -1,0 +1,15 @@
+{% extends "cats/base.html" %}
+
+{% block title %}Products{% endblock %}
+{% block content %}
+				<ul class="style1">
+				{% for product in product_list %}
+					<li>
+						<h3><em><img src="" alt="" width="130" height="130" class="alignleft border" /></em>{{product.name}}</h3>
+						<p>{{product.description}}</p>
+						<p><strong>${{product.price}}</strong></p>
+						<p><a href="#" class="button-style">Read More</a></p>
+					</li>
+				{% endfor %}
+				</ul>
+{% endblock %}

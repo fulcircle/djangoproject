@@ -6,13 +6,13 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from store.models import *
-from store.util import *
 from django.db import transaction
 import datetime
 import sys
 
 def index(request):
-	return render(request, get_merchant_template(request.Merchant, 'index.html'))
+	return render(request, request.Merchant.subdomain + '/index.html',
+							  {'product_list': Product.objects.filter(merchant=request.Merchant)})
 
 # QA:
 # 1. validate email, first/last name, password length
@@ -20,7 +20,7 @@ def index(request):
 @transaction.commit_on_success
 def register(request):
 	if request.method == 'GET':
-		return render(request, get_merchant_template(request.Merchant, 'register.html'))	
+		return render(request, request.Merchant.subdomain + '/register.html')	
 
 	elif request.method == 'POST':
 		first_name = request.POST['first_name']
@@ -38,7 +38,7 @@ def register(request):
 
 def login(request):
 	if request.method == 'GET':
-		return render(request, get_merchant_template(request.Merchant, 'login.html'))
+		return render(request, request.Merchant.subdomain + '/login.html')
 
 	if request.method == 'POST':
 		email = request.POST['email']

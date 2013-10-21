@@ -1,6 +1,11 @@
+{% extends "cats/base.html" %}
+
+{% block title %}Log In{% endblock %}
+{% block content %}
 <form name="loginForm" action="{% url 'store.login' %}?next={{request.GET.next}}" method="POST">{% csrf_token %}
 <br>
 Email: <input type="text" name="email"><br>
 Password: <input type="password" name="password" /><br>
 <input type="submit" value="Login" />
 </form>
+{% endblock %}

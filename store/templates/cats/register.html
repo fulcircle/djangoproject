@@ -1,3 +1,7 @@
+{% extends "cats/base.html" %}
+
+{% block title %}Register{% endblock %}
+{% block content %}
 <form name="registrationForm" action="{% url 'store.register' %}" method="POST">{% csrf_token %}
 First name: <input type="text" name="first_name"><br>
 Last name: <input type="text" name="last_name"><br>
@@ -6,3 +10,4 @@ Email: <input type="text" name="email"><br>
 Password: <input type="password" name="password" />
 <input type="submit" value="Register" />
 </form>
+{% endblock %}
