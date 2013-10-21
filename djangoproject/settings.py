@@ -172,3 +172,4 @@ DEFAULT_SITE_DOMAIN = "www.example.com"
 # ADDED BY VIK
 # Login will persist across all our stores
 SESSION_COOKIE_DOMAIN = ".example.com"
+
