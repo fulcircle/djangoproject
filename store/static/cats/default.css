@@ -294,3 +294,6 @@ ul.style1 .first {
 	box-shadow: none;
 }
 
+form th {
+	text-align: left;
+}

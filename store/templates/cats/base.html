@@ -14,11 +14,12 @@ Released   : 20130902
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Cat Store</title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
 <link href='http://fonts.googleapis.com/css?family=Satisfy|Fjalla+One|Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 <link href="{% static 'cats/default.css' %}" rel="stylesheet" type="text/css" media="all" />
+<script src="{% static 'jquery.js' %}"></script>
 <!--[if IE 6]>
 <link href="default_ie6.css" rel="stylesheet" type="text/css" />
 <![endif]-->
@@ -43,8 +44,9 @@ Released   : 20130902
 			<div id="menu" class="box">
 				<ul>
 					<li><a href="{% url 'store.index' %}" accesskey="1" title="">Home</a></li>
-					<li><a href="{% url 'store.login' %}" accesskey="1" title="">Log In</a></li>
-					<li><a href="{% url 'store.register' %}" accesskey="2" title="">Register</a></li>
+					<li><a href="{% url 'store.login' %}" accesskey="2" title="">Log In</a></li>
+					<li><a href="{% url 'store.register' %}" accesskey="3" title="">Register</a></li>
+					<li><a href="{% url 'store.cart' %}" accesskey='4' title="">Shopping Cart</a></li>
 					<li><a href="#" accesskey="3" title="">Checkout</a></li>
 					<!--<li><a href="#" accesskey="4" title="">Careers</a></li>
 					<li><a href="#" accesskey="5" title="">Contact Us</a></li> -->

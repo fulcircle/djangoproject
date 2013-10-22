@@ -1,0 +1,17 @@
+{% extends "cats/base.html" %}
+{% block content %}
+{% block title %}Shopping Cart{% endblock %}
+	<ul class="style1">
+	{% for cartitem in cart_items %}
+		<li>
+			<h3><em><img src="" alt="" width="130" height="130" class="alignleft border" /></em>{{cartitem.product.name}}</h3>
+			<p><strong>${{cartitem.product.price}}</strong></p>
+			<form action="{% url 'store.cartupdate' cartitem.product.id %}" method="POST"> {% csrf_token %}
+			{{cartitem.qty_form.as_table}}
+			<p><input type="submit" value="Update Quantity" /></p>
+			</form>
+		</li>
+		<a href="{% url 'store.cartremove' cartitem.product.id %}">Remove Item</a>
+	{% endfor %}
+	</ul>
+{% endblock %}

@@ -19,6 +19,13 @@ class Order(models.Model):
 	user = models.ForeignKey(User)
 	products = models.ManyToManyField(Product, through='OrderItem')
 	merchant = models.ForeignKey(Merchant)
+	address1 = models.CharField(max_length=100)
+	address2 = models.CharField(max_length=100)
+	state = models.CharField(max_length=2)
+	credit_card_name = models.CharField(max_length=100)
+	credit_card_number = models.CharField(max_length=50)
+	credit_card_expiry = models.CharField(max_length=4)
+	credit_card_cvv = models.CharField(max_length=3)
 
 
 class OrderItem(models.Model):
