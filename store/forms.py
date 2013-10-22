@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.util import ErrorList
+from store.models import *
 
 class DivErrorList(ErrorList):
 	def __unicode__(self):
@@ -20,4 +21,15 @@ class RegisterForm(forms.Form):
 
 class UpdateQuantityForm(forms.Form):
 	quantity = forms.IntegerField(min_value=0, max_value=99, widget=forms.TextInput(attrs={'size':'2'}))
+
+class CreditCardForm(forms.ModelForm):
+	class Meta:
+		model = Order
+		fields = ('credit_card_name', 'credit_card_number', 'credit_card_expiry')
+
+class ShippingInfoForm(forms.ModelForm):
+	class Meta:
+		model = Order
+		fields = ('address1', 'address2', 'address3', 'state')
+
 

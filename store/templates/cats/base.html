@@ -29,7 +29,7 @@ Released   : 20130902
 	<div id="page" class="container">
 		<div id="content"> <a href="#" class="image-style"><img src="{% static 'cats/img03.jpg' %}" width="725" height="300" alt="" /></a>
 			<div id="box1" class="post">
-				<h2 class="title">{% block title %}Products{% endblock %}</h2>
+				<h2 class="title">{% block title %}{% endblock %}</h2>
 			</div>
 			<div id="box2">
 			{% block content %}{% endblock %}
@@ -43,11 +43,13 @@ Released   : 20130902
 			</div>
 			<div id="menu" class="box">
 				<ul>
-					<li><a href="{% url 'store.index' %}" accesskey="1" title="">Home</a></li>
-					<li><a href="{% url 'store.login' %}" accesskey="2" title="">Log In</a></li>
-					<li><a href="{% url 'store.register' %}" accesskey="3" title="">Register</a></li>
-					<li><a href="{% url 'store.cart' %}" accesskey='4' title="">Shopping Cart</a></li>
-					<li><a href="#" accesskey="3" title="">Checkout</a></li>
+					<li><a href="{% url 'store.index' %}">Home</a></li>
+					<li><a href="{% url 'store.login' %}">Log In</a></li>
+					<li><a href="{% url 'store.logout' %}">Log Out</a></li>
+					<li><a href="{% url 'store.register' %}">Register</a></li>
+					<li><a href="{% url 'store.cart' %}">Shopping Cart</a></li>
+					<li><a href="{% url 'store.vieworders' %}">View Orders</a></li>
+					<li><a href="{% url 'store.checkout' %}">Checkout</a></li>
 					<!--<li><a href="#" accesskey="4" title="">Careers</a></li>
 					<li><a href="#" accesskey="5" title="">Contact Us</a></li> -->
 				</ul>

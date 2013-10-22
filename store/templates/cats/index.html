@@ -7,7 +7,7 @@
 					<li>
 						<h3><em><img src="" alt="" width="130" height="130" class="alignleft border" /></em>{{product.name}}</h3>
 						<p>{{product.description}}</p>
-						<p><strong>${{product.price}}</strong></p>
+						<p><strong>${{product.price|floatformat:"2"}}</strong></p>
 						<form action="{% url 'store.cartadd' product.id %}" method="POST"> {% csrf_token %}
 						<p>Quantity:
 							<select name="quantity">
