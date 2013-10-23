@@ -15,7 +15,7 @@ This is a simple store app written in Python/Django.  The app can be found in th
 
 How to Use
 --------------
-You *must* setup routing on your local machine (e.g. editing /etc/hosts) to reroute cats.example.com, hats.example.com, and mats.example.com to localhost.  Those three URLs are the stores urls/stores that this django project will be demoing. 
+You *must* setup routing on your local machine (e.g. editing /etc/hosts) to reroute cats.example.com, hats.example.com, and mats.example.com to localhost.  Those three URLs are the stores that this django project will be demoing. 
 
 Then, it should be as simple as executing
 ```
