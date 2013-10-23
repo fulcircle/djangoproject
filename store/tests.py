@@ -80,9 +80,10 @@ class CheckoutTestCase(TestCase):
 		response = post_request(self.client, 'store.checkout', post_data={'credit_card_name':self.user.first_name + ' ' + self.user.last_name,
 															   'credit_card_number': '123456789012',
 															   'credit_card_expiry': '0213',
-															   'address1': '75 Test Drive',
-															   'address2': 'Suite 211',
-															   'address3': 'New York',
+															   'street': '75 Test Drive',
+															   'apt': 'New York',
+															   'city': 'New York',
+															   'zip_code': "10021",
 															   'state': 'NY'})
 		order = Order.objects.get(user=self.user, credit_card_number='123456789012', merchant=self.merchant)
 		order_items = order.orderitem_set.all()
@@ -90,7 +91,7 @@ class CheckoutTestCase(TestCase):
 		self.assertTrue(order_items.filter(product=self.product).exists())
 		self.assertTrue(order_items.filter(product=self.product).count(),2)
 		# Assert that the shopping cart is now empty
-		self.assertTrue(self.shopping_cart.cartitem_set.count(),0)
+		self.assertEqual(self.shopping_cart.cartitem_set.count(),0)
 
 
 def post_request(client, view, post_data={}, subdomain="test", args=()):

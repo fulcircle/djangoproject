@@ -1,19 +1,23 @@
-{% extends "cats/base.html" %}
+{% extends "mats/base.html" %}
 {% block title %}Checkout{% endblock %}
 {% block content %}
-<form name="checkoutForm" action="{% url 'store.checkout' %}" method='POST'>{% csrf_token %}
-<div id="box2">
-	<table>
-		{{shipping_info_form.as_table}}
-	</table>
-</div>
-<div id="box2">
-	<table>
-		{{credit_card_form.as_table}}
-	</table>
-</div>
-<div id="box2">
-	<input type="submit" value="Place Order" />
-</div>
-</form>
+{% if request.GET.no_items %}
+	<p style="color:red"><strong>You have no items to checkout!</strong></p>
+{% else %}
+	<form name="checkoutForm" action="{% url 'store.checkout' %}" method='POST'>{% csrf_token %}
+	<div id="box2" style="padding:20px 20px">
+		<table>
+			{{shipping_info_form.as_table}}
+		</table>
+	</div>
+	<div id="box2" style="padding:20px 20px">
+		<table>
+			{{credit_card_form.as_table}}
+		</table>
+	</div>
+	<div id="box2" style="padding:20px 20px">
+		<input type="submit" value="Place Order" />
+	</div>
+	</form>
+{% endif %}
 {% endblock %}

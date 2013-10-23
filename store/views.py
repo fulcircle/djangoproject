@@ -21,9 +21,6 @@ def index(request):
 	return render(request, request.Merchant.subdomain + '/index.html',
 							  {'product_list': product_list})
 
-# QA:
-# 1. validate email, first/last name, password length
-# 2. handle issue with someone trying to register again
 @transaction.commit_on_success
 def register(request):
 
@@ -34,12 +31,15 @@ def register(request):
 			last_name = form.cleaned_data['last_name']
 			email = form.cleaned_data['email']
 			password = form.cleaned_data['password']
-
+			if (User.objects.filter(username=email).exists()):
+				url = reverse('store.register')
+				return redirect(url + '?user_exists=1', {'form':form})
 			user = User.objects.create_user(email, email, password, first_name=first_name, last_name=last_name)
 			customers_grp = Group.objects.get(name='customers')
 			user.groups.add(customers_grp)
 			user.save()
-			return HttpResponse("Successfully registered, wahoo!")
+			url = reverse('store.register')
+			return redirect(url + '?register_success=1')
 		else:
 			return render(request, request.Merchant.subdomain + '/register.html', {'form': form})
 	else:
@@ -81,13 +81,14 @@ def cart(request):
 	shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user, merchant=request.Merchant)
 	# Loop through all the items in the shopping cart and display the item info and the (editable) quantity 
 	cart_items = CartItem.objects.filter(shopping_cart=shopping_cart)
+	cart_items.total = Decimal(0.0)
 	for item in cart_items:
 		qty_form = UpdateQuantityForm(initial={'quantity':item.quantity})
 		item.qty_form = qty_form
+		item.total_price = item.quantity * item.product.price
+		cart_items.total += item.total_price
 	return render(request, request.Merchant.subdomain + '/cart.html', {'cart_items':cart_items})
 
-# QA:
-# 1. handle adding non-existant products
 @login_required(login_url='/store/login')
 def cartadd(request, product_id):
 	quantity = int(request.POST.get('quantity', 1))
@@ -128,8 +129,6 @@ def cartremove(request, product_id):
 	return redirect('store.cart')
 
 
-#QA:
-# 1. verify there are items in the cart if we are POSTing
 @login_required(login_url='/store/login')
 @transaction.commit_on_success
 def checkout(request):
@@ -142,10 +141,12 @@ def checkout(request):
 
 			# Place the actual order
 			order.save()
-			DEBUG_empty_cart = False 
 			shopping_cart = ShoppingCart.objects.get(user=request.user, merchant=request.Merchant)
 			cart_items = CartItem.objects.filter(shopping_cart=shopping_cart)
 
+			# If there are no items in the shopping cart, redirect to the index
+			if cart_items.count() == 0:
+				return redirect('store.index')
 			# Add all the shopping cart items to the order
 			order_items = []
 			order_total = Decimal(0.0)
@@ -160,8 +161,7 @@ def checkout(request):
 			OrderItem.objects.bulk_create(order_items)
 
 			# Empty the shopping cart
-			if (DEBUG_empty_cart):
-				cart_items.delete()
+			cart_items.delete()
 
 			return render(request, request.Merchant.subdomain + '/orderplaced.html')
 
@@ -169,12 +169,16 @@ def checkout(request):
 			return render(request, request.Merchant.subdomain + '/checkout.html', {'credit_card_form':credit_card_form, 'shipping_info_form':shipping_info_form})
 
 	else:
-		credit_card_form = CreditCardForm()
-		shipping_info_form = ShippingInfoForm()
-		return render(request, request.Merchant.subdomain + '/checkout.html', {'credit_card_form':credit_card_form, 'shipping_info_form':shipping_info_form})
+		shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user, merchant=request.Merchant)
+		if 'no_items' in request.GET or shopping_cart.products.count() != 0:
+			credit_card_form = CreditCardForm()
+			shipping_info_form = ShippingInfoForm()
+			return render(request, request.Merchant.subdomain + '/checkout.html', {'credit_card_form':credit_card_form, 'shipping_info_form':shipping_info_form})
+		# If there are no items to checkout
+		else:
+			return redirect(reverse('store.checkout') + "?no_items=1")
 
-# QA:
-# 1. verify we have at least one order to view
+
 @login_required(login_url='/store/login')
 def vieworders(request):
 	orders = Order.objects.filter(user=request.user, merchant=request.Merchant)

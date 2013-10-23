@@ -1,4 +1,4 @@
-{% extends "cats/base.html" %}
+{% extends "mats/base.html" %}
 
 {% block title %}Past Orders{% endblock %}
 {% block content %}
@@ -6,9 +6,9 @@
 				<ul class="style1">
 				{% for order in orders %}
 					<li>
-						<p>Order Date: {{order.order_date|date:"M d, Y"}}
+						<p><strong>Order Date: {{order.order_date|date:"M d, Y"}}</strong></p>
 						{% for item in order.items %}
-							<h3>{{item.product.name}} X {{item.quantity}}</h3>
+							<p>{{item.product.name}} x {{item.quantity}}</p>
 						{% endfor %}
 						<p><strong>Total: ${{order.total|floatformat:"2"}}</strong></p>
 					</li>
