@@ -1,0 +1,11 @@
+{% extends "cats/base.html" %}
+
+{% block title %}Register{% endblock %}
+{% block content %}
+<form name="registrationForm" action="{% url 'store.register' %}" method="POST">{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+<input type="submit" value="Register" />
+</form>
+{% endblock %}

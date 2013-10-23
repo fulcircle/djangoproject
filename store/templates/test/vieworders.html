@@ -1,0 +1,18 @@
+{% extends "cats/base.html" %}
+
+{% block title %}Past Orders{% endblock %}
+{% block content %}
+		<div class="box2">
+				<ul class="style1">
+				{% for order in orders %}
+					<li>
+						<p>Order Date: {{order.order_date|date:"M d, Y"}}
+						{% for item in order.items %}
+							<h3>{{item.product.name}} X {{item.quantity}}</h3>
+						{% endfor %}
+						<p><strong>Total: ${{order.total|floatformat:"2"}}</strong></p>
+					</li>
+				{% endfor %}
+				</ul>
+		</div>
+{% endblock %}

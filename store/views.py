@@ -10,6 +10,7 @@ from store.models import *
 from store.forms import *
 from django.db import transaction
 from django import forms
+from django.core.urlresolvers import reverse
 import datetime
 import sys
 
@@ -44,29 +45,28 @@ def register(request):
 
 
 def login(request):
-
 	if request.method == 'POST':
 		form = LoginForm(request.POST, error_class=DivErrorList)
 		if form.is_valid():
 			email = form.cleaned_data['email']
 			password = form.cleaned_data['password']
-
 			user = authenticate(username=email, password=password)
-			if user is not None:
-				if user.is_active:
-					auth_login(request, user)
-					if request.GET['next']:
-						return redirect(request.GET['next'])
-					else:
-						return HttpResponse("User is authenticated")
+			if user is not None and user.is_active:
+				auth_login(request, user)
+				if 'next' in request.GET and request.GET['next']:
+					return redirect(request.GET['next'])
 				else:
-					return HttpResponse("User is not authenticated")
+					return redirect('store.index')
 			else:
-				return HttpResponse("Username and password were incorrect.")
+				url = reverse('store.login')
+				url = url + '?failed_login=1'
+				return redirect(url)
 		else:
 			return render(request, request.Merchant.subdomain + '/login.html', {'form':form})
 	else:
 		form = LoginForm()
+		if 'failed_login' in request.GET:
+			form.failed_login = True
 		return render(request, request.Merchant.subdomain + '/login.html', {'form':form})
 
 def logout(request):
@@ -96,10 +96,11 @@ def cartadd(request, product_id):
 
 	if (created):
 		cart_item.quantity = quantity
-		cart_item.save()
 	else:
 		cart_item.quantity += quantity
-		cart_item.save()
+
+	cart_item.save()
+
 	return redirect('store.cart')	
 
 @login_required(login_url='/store/login')
@@ -135,7 +136,7 @@ def checkout(request):
 		shipping_info_form = ShippingInfoForm(request.POST, error_class=DivErrorList, instance=order)
 
 		if credit_card_form.is_valid() and shipping_info_form.is_valid():
-			
+
 			# Place the actual order
 			order.save()
 			DEBUG_empty_cart = False 

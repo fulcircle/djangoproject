@@ -1,0 +1,25 @@
+{% extends "cats/base.html" %}
+
+{% block title %}Products{% endblock %}
+{% block content %}
+				<ul class="style1">
+				{% for product in product_list %}
+					<li>
+						<h3><em><img src="" alt="" width="130" height="130" class="alignleft border" /></em>{{product.name}}</h3>
+						<p>{{product.description}}</p>
+						<p><strong>${{product.price|floatformat:"2"}}</strong></p>
+						<form action="{% url 'store.cartadd' product.id %}" method="POST"> {% csrf_token %}
+						<p>Quantity:
+							<select name="quantity">
+								  <option value="1">1</option>
+								  <option value="2">2</option>
+								  <option value="3">3</option>
+								  <option value="4">4</option>
+							</select>
+						</p>
+						<p><input type="submit" value="Add To Cart" /></p>
+						</form>
+					</li>
+				{% endfor %}
+				</ul>
+{% endblock %}

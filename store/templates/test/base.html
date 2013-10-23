@@ -1,0 +1,62 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+Name       : Flourish 
+Description: A two-column, fixed-width design with dark color scheme.
+Version    : 1.0
+Released   : 20130902
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Cat Store</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href='http://fonts.googleapis.com/css?family=Satisfy|Fjalla+One|Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
+<link href="{% static 'cats/default.css' %}" rel="stylesheet" type="text/css" media="all" />
+<script src="{% static 'jquery.js' %}"></script>
+<!--[if IE 6]>
+<link href="default_ie6.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+</head>
+<body>
+<div id="wrapper">
+	<div id="page" class="container">
+		<div id="content"> <a href="#" class="image-style"><img src="{% static 'cats/img03.jpg' %}" width="725" height="300" alt="" /></a>
+			<div id="box1" class="post">
+				<h2 class="title">{% block title %}{% endblock %}</h2>
+			</div>
+			<div id="box2">
+			{% block content %}{% endblock %}
+			</div>
+			<div id="footer">
+			</div>
+		</div>
+		<div id="sidebar">
+			<div id="logo">
+				<h1><a href="index.html">CatStore</a></h1>
+			</div>
+			<div id="menu" class="box">
+				<ul>
+					<li><a href="{% url 'store.index' %}">Home</a></li>
+					<li><a href="{% url 'store.login' %}">Log In</a></li>
+					<li><a href="{% url 'store.logout' %}">Log Out</a></li>
+					<li><a href="{% url 'store.register' %}">Register</a></li>
+					<li><a href="{% url 'store.cart' %}">Shopping Cart</a></li>
+					<li><a href="{% url 'store.vieworders' %}">View Orders</a></li>
+					<li><a href="{% url 'store.checkout' %}">Checkout</a></li>
+					<!--<li><a href="#" accesskey="4" title="">Careers</a></li>
+					<li><a href="#" accesskey="5" title="">Contact Us</a></li> -->
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix">&nbsp;</div>
+</div>
+</body>
+</html>
