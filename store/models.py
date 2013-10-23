@@ -1,11 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 from decimal import *
+from django.contrib.sites.models import get_current_site
 
 
 class Merchant(models.Model):
 	subdomain = models.CharField(max_length=50,primary_key=True)
 	name = models.CharField(max_length=50, unique=True)
+
+	def __unicode__(self):
+		current_domain = get_current_site(None).domain
+		return self.name + " (" + self.subdomain + "." + current_domain + ")"
 
 
 class Product(models.Model):
@@ -14,9 +19,12 @@ class Product(models.Model):
 	description = models.CharField(max_length=800)
 	merchant = models.ForeignKey(Merchant)
 
+	def __unicode__(self):
+		return self.name + " (" + str(self.id) + ")"
+
 
 class Order(models.Model):
-	order_date = models.DateField()
+	order_date = models.DateField(verbose_name="Order Date")
 	user = models.ForeignKey(User)
 	products = models.ManyToManyField(Product, through='OrderItem')
 	merchant = models.ForeignKey(Merchant)
@@ -28,6 +36,9 @@ class Order(models.Model):
 	credit_card_number = models.CharField(max_length=50, verbose_name="Card Number")
 	credit_card_expiry = models.CharField(max_length=4, verbose_name="Card Expiration")
 	total = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal(0.0))
+
+	def __unicode__(self):
+		return str(self.id)
 
 
 class OrderItem(models.Model):
