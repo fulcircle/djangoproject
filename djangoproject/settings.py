@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('admin', 'admin@example.com'),
 )
 
 MANAGERS = ADMINS
@@ -48,14 +48,33 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
+# ADDED BY VIK
+# get the root path of the project
+import os.path
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+SITE_DOMAIN = "example.com"
+# ADDED BY VIK
+# set the site domain for subdomain redirect stuff (look at store/middleware/subdomains.py) 
+
+DEFAULT_SITE_DOMAIN = "www." + SITE_DOMAIN
+
+# ADDED BY VIK
+# Login will persist across all our stores
+SESSION_COOKIE_DOMAIN = "." + SITE_DOMAIN
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
+
+# ADDED BY VIK
+# make the request and auth objects available to templates (used for redirecting back to a previous page after login)
+TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth","django.core.context_processors.request")
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -161,15 +180,4 @@ LOGGING = {
     }
 }
 
-# ADDED BY VIK
-# make the request and auth objects available to templates (used for redirecting back to a previous page after login)
-TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth","django.core.context_processors.request")
-
-# ADDED BY VIK
-# set the site domain for subdomain redirect stuff (look at store/middleware/subdomains.py) 
-DEFAULT_SITE_DOMAIN = "www.example.com"
-
-# ADDED BY VIK
-# Login will persist across all our stores
-SESSION_COOKIE_DOMAIN = ".example.com"
 

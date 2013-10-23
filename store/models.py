@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from decimal import *
 from django.contrib.sites.models import get_current_site
-
+from djangoproject import settings
+import os
 
 class Merchant(models.Model):
 	subdomain = models.CharField(max_length=50,primary_key=True)
@@ -15,9 +16,13 @@ class Merchant(models.Model):
 
 class Product(models.Model):
 	name = models.CharField(max_length=50)
+	image = models.FileField(upload_to=settings.MEDIA_ROOT)
 	price = models.DecimalField(max_digits=10, decimal_places=2)
 	description = models.CharField(max_length=800)
 	merchant = models.ForeignKey(Merchant)
+
+	def get_image_url(self):
+		return settings.MEDIA_URL + os.path.basename(self.image.name) 
 
 	def __unicode__(self):
 		return self.name + " (" + str(self.id) + ")"

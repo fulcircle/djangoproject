@@ -14,9 +14,12 @@ from django.core.urlresolvers import reverse
 import datetime
 import sys
 
+
 def index(request):
+
+	product_list = Product.objects.filter(merchant=request.Merchant)
 	return render(request, request.Merchant.subdomain + '/index.html',
-							  {'product_list': Product.objects.filter(merchant=request.Merchant)})
+							  {'product_list': product_list})
 
 # QA:
 # 1. validate email, first/last name, password length

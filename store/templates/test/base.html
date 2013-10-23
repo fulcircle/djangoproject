@@ -43,13 +43,16 @@ Released   : 20130902
 			</div>
 			<div id="menu" class="box">
 				<ul>
-					<li><a href="{% url 'store.index' %}">Home</a></li>
-					<li><a href="{% url 'store.login' %}">Log In</a></li>
-					<li><a href="{% url 'store.logout' %}">Log Out</a></li>
-					<li><a href="{% url 'store.register' %}">Register</a></li>
-					<li><a href="{% url 'store.cart' %}">Shopping Cart</a></li>
-					<li><a href="{% url 'store.vieworders' %}">View Orders</a></li>
-					<li><a href="{% url 'store.checkout' %}">Checkout</a></li>
+					<li><a href="{% url 'store.index' %}">Products</a></li>
+					{% if not user.is_authenticated %}
+						<li><a href="{% url 'store.login' %}">Log In</a></li>
+						<li><a href="{% url 'store.register' %}">Register</a></li>
+					{% else %}
+						<li><a href="{% url 'store.cart' %}">Shopping Cart</a></li>
+						<li><a href="{% url 'store.vieworders' %}">View Orders</a></li>
+						<li><a href="{% url 'store.checkout' %}">Checkout</a></li>
+						<li><a href="{% url 'store.logout' %}">Log Out</a></li>
+					{% endif %}
 					<!--<li><a href="#" accesskey="4" title="">Careers</a></li>
 					<li><a href="#" accesskey="5" title="">Contact Us</a></li> -->
 				</ul>

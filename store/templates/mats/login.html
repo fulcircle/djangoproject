@@ -1,0 +1,14 @@
+{% extends "cats/base.html" %}
+
+{% block title %}Log In{% endblock %}
+{% block content %}
+<form name="loginForm" action="{% url 'store.login' %}?next={{request.GET.next}}" method="POST">{% csrf_token %}
+{% if form.failed_login %}
+	<p style="color:red">Username and/or password is incorrect</p>
+{%endif %}
+<table>
+{{ form.as_table }}
+</table>
+<input type="submit" value="Login" />
+</form>
+{% endblock %}

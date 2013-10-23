@@ -1,0 +1,14 @@
+{% extends "cats/base.html" %}
+{% block content %}
+{% block title %}Checkout{% endblock %}
+<div id="box2">
+	<table>
+		{{shipping_info_form.as_table}}
+	</table>
+</div>
+<div id="box2">
+	<table>
+		{{credit_card_form.as_table}}
+	</table>
+</div>
+{% endblock %}
